@@ -1,12 +1,16 @@
 package com.matrimony.demo.controller;
 
+import com.matrimony.demo.exception.AppException;
 import com.matrimony.demo.exception.BadRequestException;
 import com.matrimony.demo.model.AuthProvider;
+import com.matrimony.demo.model.Role;
+import com.matrimony.demo.model.RoleName;
 import com.matrimony.demo.model.User;
 import com.matrimony.demo.payload.ApiResponse;
 import com.matrimony.demo.payload.AuthResponse;
 import com.matrimony.demo.payload.LoginRequest;
 import com.matrimony.demo.payload.SignUpRequest;
+import com.matrimony.demo.repository.RoleRepository;
 import com.matrimony.demo.repository.UserRepository;
 import com.matrimony.demo.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,100 +28,73 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private TokenProvider tokenProvider;
+	@Autowired
+	private TokenProvider tokenProvider;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	@PostMapping("/login")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
-    }
+		String token = tokenProvider.createToken(authentication);
+		return ResponseEntity.ok(new AuthResponse(token));
+	}
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new BadRequestException("Email address already in use.");
+	@PostMapping("/signup")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			throw new BadRequestException("Email address already in use.");
+		}
+		if(userRepository.existsByUsername(signUpRequest.getUsername())) {
+            throw new BadRequestException("Username already in use.");
         }
+		// Creating user's account
+		User user = new User();
+		user.setName(signUpRequest.getName());
+		user.setUsername(signUpRequest.getUsername());
+		user.setEmail(signUpRequest.getEmail());
+		user.setPassword(signUpRequest.getPassword());
+		user.setProvider(AuthProvider.local);
+		Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set."));
+		user.setRoles(Collections.singleton(userRole));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Creating user's account
-        User user = new User();
-        user.setName(signUpRequest.getName());
-        user.setUsername(signUpRequest.getUsername());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(signUpRequest.getPassword());
-        user.setProvider(AuthProvider.local);
+		User result = userRepository.save(user);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
+				.buildAndExpand(result.getId()).toUri();
 
-        User result = userRepository.save(user);
+		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully@"));
+	}
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
-    }
-    
-	/*
-	 * @Autowired private OverviewRepository overviewRepository;
-	 * 
-	 * @PreAuthorize("hasAnyRole('ROLE_USER')")
-	 * 
-	 * @GetMapping("/overviews") public Page<Overview> getOverviews(Pageable
-	 * pageable) { return overviewRepository.findAll(pageable); }
-	 * 
-	 * @Autowired private MissionRepository missionRepository;
-	 * 
-	 * @GetMapping("/missions") public Page<Mission> getMissions(Pageable pageable)
-	 * { return missionRepository.findAll(pageable); }
-	 * 
-	 * @Autowired private LeadershipRepository leadershipRepository;
-	 * 
-	 * @GetMapping("/leaderships") public Page<Leadership> getLeaderships(Pageable
-	 * pageable) { return leadershipRepository.findAll(pageable); }
-	 * 
-	 * @Autowired private AwardRepository awardRepository;
-	 * 
-	 * @GetMapping("/awards") public Page<Award> getAwards(Pageable pageable) {
-	 * return awardRepository.findAll(pageable); }
-	 * 
-	 * @Autowired private TestimonialRepository testimonialRepository;
-	 * 
-	 * @GetMapping("/testimonials") public Page<Testimonial>
-	 * getTestimonials(Pageable pageable) { return
-	 * testimonialRepository.findAll(pageable); }
-	 */
 }
 /*
  * import com.matrimony.demo.exception.AppException; import
- * com.matrimony.demo.model.Role; import com.matrimony.demo.model.RoleName; import
- * com.matrimony.demo.model.User; import com.matrimony.demo.payload.ApiResponse;
- * import com.matrimony.demo.payload.JwtAuthenticationResponse; import
+ * com.matrimony.demo.model.Role; import com.matrimony.demo.model.RoleName;
+ * import com.matrimony.demo.model.User; import
+ * com.matrimony.demo.payload.ApiResponse; import
+ * com.matrimony.demo.payload.JwtAuthenticationResponse; import
  * com.matrimony.demo.payload.LoginRequest; import
  * com.matrimony.demo.payload.SignUpRequest; import
  * com.matrimony.demo.repository.RoleRepository; import

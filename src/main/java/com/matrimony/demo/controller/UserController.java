@@ -2,6 +2,7 @@ package com.matrimony.demo.controller;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.Collections;
 
 import javax.validation.Valid;
 
@@ -26,15 +27,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.matrimony.demo.exception.AppException;
 import com.matrimony.demo.exception.BadRequestException;
 import com.matrimony.demo.exception.ResourceNotFoundException;
 import com.matrimony.demo.model.AuthProvider;
 import com.matrimony.demo.model.Role;
+import com.matrimony.demo.model.RoleName;
 import com.matrimony.demo.model.User;
 import com.matrimony.demo.payload.ApiResponse;
 import com.matrimony.demo.payload.SignUpRequest;
 import com.matrimony.demo.payload.UserIdentityAvailability;
 import com.matrimony.demo.payload.UserProfile;
+import com.matrimony.demo.repository.RoleRepository;
 import com.matrimony.demo.repository.UserRepository;
 import com.matrimony.demo.security.CurrentUser;
 import com.matrimony.demo.security.UserPrincipal;
@@ -51,6 +55,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@GetMapping("/user/me")
 	@PreAuthorize("hasRole('USER')")
@@ -102,7 +109,8 @@ public class UserController {
 	        user.setEmail(signUpRequest.getEmail());
 	        user.setPassword(signUpRequest.getPassword());
 	        user.setProvider(AuthProvider.local);
-
+	        Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set."));
+	        user.setRoles(Collections.singleton(userRole));
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 	        User result = userRepository.save(user);
