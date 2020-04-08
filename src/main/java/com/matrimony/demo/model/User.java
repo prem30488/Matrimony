@@ -8,12 +8,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
+import org.springframework.validation.annotation.Validated;
 
 
 @Entity
@@ -26,6 +28,7 @@ import org.hibernate.annotations.NaturalId;
 public class User  extends DateAudit {
 	
     @Id
+    @NaturalId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -37,7 +40,7 @@ public class User  extends DateAudit {
     @Column(nullable = false)
     private String name;
 
-    @NaturalId
+    //@NaturalId
     @NotBlank
     @Size(max = 40)
     @Email
@@ -49,9 +52,10 @@ public class User  extends DateAudit {
     @Column(nullable = false)
     private Boolean emailVerified = false;
 
-    @NotBlank
+    //@NotBlank(message = "Password is mandatory")
     @Size(max = 100)
     @JsonIgnore
+    @Valid
     private String password;
 
     @NotNull
@@ -67,7 +71,7 @@ public class User  extends DateAudit {
     private Set<Role> roles = new HashSet<>();
 
     public User() {
-
+    	super();
     }
 
     public User(String name, String username, String email, String password) {
