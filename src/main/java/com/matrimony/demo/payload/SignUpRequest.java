@@ -1,5 +1,6 @@
 package com.matrimony.demo.payload;
 
+import javax.persistence.Column;
 import javax.validation.constraints.*;
 
 public class SignUpRequest {
@@ -20,6 +21,14 @@ public class SignUpRequest {
     @Size(min = 6, max = 20)
     private String password;
 
+    @NotBlank
+    @Column(nullable = false)
+    private String sex;
+    
+    @NotBlank
+    @Column(nullable = false)
+    private String phoneNumber;
+    
     public String getName() {
         return name;
     }
@@ -51,4 +60,22 @@ public class SignUpRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+    
+    
 }

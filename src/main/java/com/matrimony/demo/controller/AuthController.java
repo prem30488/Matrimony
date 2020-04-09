@@ -69,6 +69,9 @@ public class AuthController {
 		if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             throw new BadRequestException("Username already in use.");
         }
+		if(userRepository.existsByPhoneNumber(signUpRequest.getPhoneNumber())) {
+            throw new BadRequestException("Phone number already in use.");
+        }
 		// Creating user's account
 		User user = new User();
 		user.setName(signUpRequest.getName());
@@ -79,6 +82,8 @@ public class AuthController {
 		Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set."));
 		user.setRoles(Collections.singleton(userRole));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setSex(signUpRequest.getSex());
+		user.setPhoneNumber(signUpRequest.getPhoneNumber());
 
 		User result = userRepository.save(user);
 

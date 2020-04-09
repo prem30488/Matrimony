@@ -23,9 +23,10 @@ import org.springframework.validation.annotation.Validated;
 		@UniqueConstraint(columnNames = {
 	            "username"
 	        }),
-        @UniqueConstraint(columnNames = "email")
+        @UniqueConstraint(columnNames = "email"),
+        @UniqueConstraint(columnNames = "phoneNumber")
 })
-public class User  extends DateAudit {
+public class User extends DateAudit {
 	
     @Id
     @NaturalId
@@ -53,7 +54,7 @@ public class User  extends DateAudit {
     private Boolean emailVerified = false;
 
     //@NotBlank(message = "Password is mandatory")
-    @Size(max = 100)
+    @Size(min = 6,max = 100)
     @JsonIgnore
     @Valid
     private String password;
@@ -63,6 +64,14 @@ public class User  extends DateAudit {
     private AuthProvider provider;
 
     private String providerId;
+    
+    @NotBlank
+    @Column(nullable = false)
+    private String sex;
+    
+    @NotBlank
+    @Column(nullable = false)
+    private String phoneNumber;
     
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -74,11 +83,13 @@ public class User  extends DateAudit {
     	super();
     }
 
-    public User(String name, String username, String email, String password) {
+    public User(String name, String username, String email, String password, String sex, String phoneNumber) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.sex = sex;
+        this.phoneNumber = phoneNumber;
     }
     
     // Getters and Setters (Omitted for brevity)
@@ -153,6 +164,30 @@ public class User  extends DateAudit {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public Boolean getEmailVerified() {
+		return emailVerified;
+	}
+
+	public void setEmailVerified(Boolean emailVerified) {
+		this.emailVerified = emailVerified;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	
 	
