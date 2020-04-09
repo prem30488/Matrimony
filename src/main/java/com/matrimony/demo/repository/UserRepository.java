@@ -2,6 +2,8 @@ package com.matrimony.demo.repository;
 
 import com.matrimony.demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,5 +25,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByUsername(String username);
     
     Boolean existsByPhoneNumber(String phoneNumber);
+    
+    @Query("select case when count(c)> 1 then true else false end from User c where lower(c.email) like lower(:email)")
+    boolean existsUserLikeCustomQueryEmail(@Param("email") String email);
 
+    @Query("select case when count(c)> 1 then true else false end from User c where lower(c.username) like lower(:username)")
+    boolean existsUserLikeCustomQueryUsername(@Param("username") String username);
+    
+    @Query("select case when count(c)> 1 then true else false end from User c where lower(c.phoneNumber) like lower(:phoneNumber)")
+    boolean existsUserLikeCustomQueryPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }

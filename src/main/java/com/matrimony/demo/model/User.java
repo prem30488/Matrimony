@@ -67,10 +67,12 @@ public class User extends DateAudit {
     
     @NotBlank
     @Column(nullable = false)
+    @Size(min = 4,max = 10)
     private String sex;
     
     @NotBlank
     @Column(nullable = false)
+    @Size(min = 10,max = 40)
     private String phoneNumber;
     
     @ManyToMany(fetch = FetchType.EAGER)

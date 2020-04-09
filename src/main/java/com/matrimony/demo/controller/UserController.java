@@ -49,13 +49,13 @@ import com.matrimony.demo.security.UserPrincipal;
 public class UserController {
 
 	@Autowired
-    private PasswordEncoder passwordEncoder;
-	
+	private PasswordEncoder passwordEncoder;
+
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -95,41 +95,49 @@ public class UserController {
 
 	@PostMapping("/user/addUser")
 	public ResponseEntity<?> createUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-		 if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-	            throw new BadRequestException("Email address already in use.");
-	        }
-		 if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-	            throw new BadRequestException("Username already in use.");
-	        }
-		 if(userRepository.existsByPhoneNumber(signUpRequest.getPhoneNumber())) {
-	            throw new BadRequestException("Phone number already in use.");
-	        }
-	        // Creating user's account
-	        User user = new User();
-	        user.setName(signUpRequest.getName());
-	        user.setUsername(signUpRequest.getUsername());
-	        user.setEmail(signUpRequest.getEmail());
-	        user.setPassword(signUpRequest.getPassword());
-	        user.setProvider(AuthProvider.local);
-	        Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set."));
-	        user.setRoles(Collections.singleton(userRole));
-	        user.setPassword(passwordEncoder.encode(user.getPassword()));
-	        user.setSex(signUpRequest.getSex());
-			user.setPhoneNumber(signUpRequest.getPhoneNumber());
-			
-	        User result = userRepository.save(user);
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			throw new BadRequestException("Email address already in use.");
+		}
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			throw new BadRequestException("Username already in use.");
+		}
+		if (userRepository.existsByPhoneNumber(signUpRequest.getPhoneNumber())) {
+			throw new BadRequestException("Phone number already in use.");
+		}
+		// Creating user's account
+		User user = new User();
+		user.setName(signUpRequest.getName());
+		user.setUsername(signUpRequest.getUsername());
+		user.setEmail(signUpRequest.getEmail());
+		user.setPassword(signUpRequest.getPassword());
+		user.setProvider(AuthProvider.local);
+		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+				.orElseThrow(() -> new AppException("User Role not set."));
+		user.setRoles(Collections.singleton(userRole));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setSex(signUpRequest.getSex());
+		user.setPhoneNumber(signUpRequest.getPhoneNumber());
 
-	        URI location = ServletUriComponentsBuilder
-	                .fromCurrentContextPath().path("/user/me")
-	                .buildAndExpand(result.getId()).toUri();
+		User result = userRepository.save(user);
 
-	        return ResponseEntity.created(location)
-	                .body(new ApiResponse(true, "User registered successfully@"));
+		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
+				.buildAndExpand(result.getId()).toUri();
+
+		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully@"));
 	}
 
 	@PutMapping("/user/users/{userId}")
 	public User updateUser(@PathVariable Long userId, @Valid @RequestBody User userRequest) {
 		return userRepository.findById(userId).map(user -> {
+			if (userRepository.existsUserLikeCustomQueryEmail(userRequest.getEmail())) {
+				throw new BadRequestException("Email address already in use.");
+			}
+			if (userRepository.existsUserLikeCustomQueryUsername(userRequest.getUsername())) {
+				throw new BadRequestException("Username already in use.");
+			}
+			if (userRepository.existsUserLikeCustomQueryPhoneNumber(userRequest.getPhoneNumber())) {
+				throw new BadRequestException("Phone number already in use.");
+			}
 			user.setName(userRequest.getName());
 			user.setUsername(userRequest.getUsername());
 			user.setEmail(userRequest.getEmail());
@@ -138,8 +146,14 @@ public class UserController {
 			user.setUpdatedAt(userRequest.getUpdatedAt());
 			// user.setRoles(userRequest.getRoles());
 			// user.setPassword(user.getPassword());
+			//Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+			//		.orElseThrow(() -> new AppException("User Role not set."));
+			//user.setRoles(Collections.singleton(userRole));
+			user.setSex(userRequest.getSex());
+			user.setPhoneNumber(userRequest.getPhoneNumber());
+			
 			return userRepository.save(user);
-		}).orElseThrow(() -> new ResourceNotFoundException("User not found with " ,"id",	 userId));
+		}).orElseThrow(() -> new ResourceNotFoundException("User not found with ", "id", userId));
 	}
 
 	@DeleteMapping("/user/users/{userId}")
@@ -147,13 +161,13 @@ public class UserController {
 		return userRepository.findById(userId).map(user -> {
 			userRepository.delete(user);
 			return ResponseEntity.ok().build();
-		}).orElseThrow(() -> new ResourceNotFoundException("User not found with ","id" , userId));
+		}).orElseThrow(() -> new ResourceNotFoundException("User not found with ", "id", userId));
 	}
 
 	@GetMapping("/user/users/{userId}")
 	public User fetchUserById(@PathVariable Long userId) {
 		return userRepository.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found with ","id", userId));
+				.orElseThrow(() -> new ResourceNotFoundException("User not found with ", "id", userId));
 	}
 
 }
