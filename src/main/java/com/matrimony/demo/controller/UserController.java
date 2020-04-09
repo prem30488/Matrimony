@@ -144,11 +144,6 @@ public class UserController {
 			user.setImageUrl(userRequest.getImageUrl());
 			user.setCreatedAt(userRequest.getCreatedAt());
 			user.setUpdatedAt(userRequest.getUpdatedAt());
-			// user.setRoles(userRequest.getRoles());
-			// user.setPassword(user.getPassword());
-			//Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-			//		.orElseThrow(() -> new AppException("User Role not set."));
-			//user.setRoles(Collections.singleton(userRole));
 			user.setSex(userRequest.getSex());
 			user.setPhoneNumber(userRequest.getPhoneNumber());
 			
