@@ -153,7 +153,7 @@ public class UserController {
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
 				.buildAndExpand(result.getId()).toUri();
 
-		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully@"));
+		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
 
 	@PutMapping("/user/users/{userId}")
