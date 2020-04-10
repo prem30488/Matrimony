@@ -3,6 +3,7 @@ package com.matrimony.demo.controller;
 import java.net.URI;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -30,7 +31,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.matrimony.demo.exception.AppException;
 import com.matrimony.demo.exception.BadRequestException;
 import com.matrimony.demo.exception.ResourceNotFoundException;
+import com.matrimony.demo.model.AstroProfile;
 import com.matrimony.demo.model.AuthProvider;
+import com.matrimony.demo.model.CareerProfile;
+import com.matrimony.demo.model.FamilyProfile;
+import com.matrimony.demo.model.PartnerPreference;
+import com.matrimony.demo.model.Profile;
 import com.matrimony.demo.model.Role;
 import com.matrimony.demo.model.RoleName;
 import com.matrimony.demo.model.User;
@@ -65,6 +71,10 @@ public class UserController {
 		// UserSummary userSummary = new UserSummary(currentUser.getId(),
 		// currentUser.getUsername(), currentUser.getName());
 		// return userSummary;
+		List<User> list = userRepository.findAll();
+		for(User user : list) {
+			System.out.println("id : " +user.getId() + " username : " + user.getUsername() + " ProfileID: " + user.getProfile());
+		}
 		return userRepository.findById(userPrincipal.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 	}
@@ -117,7 +127,27 @@ public class UserController {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setSex(signUpRequest.getSex());
 		user.setPhoneNumber(signUpRequest.getPhoneNumber());
-
+		
+		Profile profile = new Profile();
+		user.setProfile(profile);
+		profile.setUser(user);
+		
+		AstroProfile astroProfile = new AstroProfile();
+		user.setAstroProfile(astroProfile);
+		astroProfile.setUser(user);
+		
+		CareerProfile careerProfile = new CareerProfile();
+		user.setCareerProfile(careerProfile);
+		careerProfile.setUser(user);
+		
+		FamilyProfile familyProfile = new FamilyProfile();
+		user.setFamilyProfile(familyProfile);
+		familyProfile.setUser(user);
+		
+		PartnerPreference partnerPreference = new PartnerPreference();
+		user.setPartnerPreference(partnerPreference);
+		partnerPreference.setUser(user);
+		
 		User result = userRepository.save(user);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")

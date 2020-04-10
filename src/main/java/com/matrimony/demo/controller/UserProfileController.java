@@ -3,6 +3,8 @@ package com.matrimony.demo.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,8 @@ import com.matrimony.demo.service.UserProfileService;
 @CrossOrigin("*")
 public class UserProfileController {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserProfileController.class);
+	
 	@Autowired
 	private final UserProfileService userProfileService;
 	

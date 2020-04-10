@@ -2,7 +2,12 @@ package com.matrimony.demo.controller;
 
 import com.matrimony.demo.exception.AppException;
 import com.matrimony.demo.exception.BadRequestException;
+import com.matrimony.demo.model.AstroProfile;
 import com.matrimony.demo.model.AuthProvider;
+import com.matrimony.demo.model.CareerProfile;
+import com.matrimony.demo.model.FamilyProfile;
+import com.matrimony.demo.model.PartnerPreference;
+import com.matrimony.demo.model.Profile;
 import com.matrimony.demo.model.Role;
 import com.matrimony.demo.model.RoleName;
 import com.matrimony.demo.model.User;
@@ -13,6 +18,9 @@ import com.matrimony.demo.payload.SignUpRequest;
 import com.matrimony.demo.repository.RoleRepository;
 import com.matrimony.demo.repository.UserRepository;
 import com.matrimony.demo.security.TokenProvider;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +42,8 @@ import java.util.Collections;
 @RequestMapping("/auth")
 public class AuthController {
 
+	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+	
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -85,6 +95,26 @@ public class AuthController {
 		user.setSex(signUpRequest.getSex());
 		user.setPhoneNumber(signUpRequest.getPhoneNumber());
 
+		Profile profile = new Profile();
+		user.setProfile(profile);
+		profile.setUser(user);
+		
+		AstroProfile astroProfile = new AstroProfile();
+		user.setAstroProfile(astroProfile);
+		astroProfile.setUser(user);
+		
+		CareerProfile careerProfile = new CareerProfile();
+		user.setCareerProfile(careerProfile);
+		careerProfile.setUser(user);
+		
+		FamilyProfile familyProfile = new FamilyProfile();
+		user.setFamilyProfile(familyProfile);
+		familyProfile.setUser(user);
+		
+		PartnerPreference partnerPreference = new PartnerPreference();
+		user.setPartnerPreference(partnerPreference);
+		partnerPreference.setUser(user);
+		
 		User result = userRepository.save(user);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/me")
