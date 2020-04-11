@@ -48,9 +48,9 @@ import com.matrimony.demo.service.ProfileService;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api")
-public class ProfileController {
+public class GeneralProfileController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
+	private static final Logger logger = LoggerFactory.getLogger(GeneralProfileController.class);
 
 	@Autowired
 	private ProfileService profileService;

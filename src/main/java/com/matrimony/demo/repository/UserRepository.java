@@ -1,6 +1,9 @@
 package com.matrimony.demo.repository;
 
 import com.matrimony.demo.model.User;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,4 +37,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Query("select case when count(c)> 1 then true else false end from User c where lower(c.phoneNumber) like lower(:phoneNumber)")
     boolean existsUserLikeCustomQueryPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
 }

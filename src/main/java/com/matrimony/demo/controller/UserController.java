@@ -68,13 +68,6 @@ public class UserController {
 	@GetMapping("/user/me")
 	@PreAuthorize("hasRole('USER')")
 	public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-		// UserSummary userSummary = new UserSummary(currentUser.getId(),
-		// currentUser.getUsername(), currentUser.getName());
-		// return userSummary;
-		List<User> list = userRepository.findAll();
-		for(User user : list) {
-			System.out.println("id : " +user.getId() + " username : " + user.getUsername() + " ProfileID: " + user.getProfile());
-		}
 		return userRepository.findById(userPrincipal.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 	}

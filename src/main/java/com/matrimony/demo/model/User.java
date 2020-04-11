@@ -5,6 +5,7 @@ import com.matrimony.demo.model.audit.DateAudit;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -241,5 +242,33 @@ public class User extends DateAudit {
 		this.partnerPreference = partnerPreference;
 	}
 	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_shortlisted", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "shortlisted_id"))
+	@JsonIgnore
+	private List<User> shortlisted;
 	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_shortlisted", joinColumns = @JoinColumn(name = "shortlisted_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JsonIgnore
+	private List<User> shortlistedOf;
+
+	public List<User> getShortlisted() {
+		return shortlisted;
+	}
+
+	public void setShortlisted(List<User> shortlisted) {
+		this.shortlisted = shortlisted;
+	}
+
+	public List<User> getShortlistedOf() {
+		return shortlistedOf;
+	}
+
+	public void setShortlistedOf(List<User> shortlistedOf) {
+		this.shortlistedOf = shortlistedOf;
+	}
+
+
+
+
 }
