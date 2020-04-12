@@ -1,5 +1,7 @@
 package com.matrimony.demo.service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,13 +42,13 @@ public class ShortlistService {
 	public Page<User> getShortlistedProfiles(Pageable pageable,UserPrincipal userPrincipal) {
 		Optional<User> u = userRepository.findById(userPrincipal.getId());
 		if (u.isPresent()) {
-			List<User> list = u.get().getShortlisted();
-			long pageSize = pageable.getPageSize();
-			long pageOffset = pageable.getOffset();
-			long total = pageOffset + list.size() + (list.size() == pageSize ? pageSize : 0);
-			List<User> list2 = list.subList((int)pageable.getOffset(),(int) total);
-			Page<User> page = new PageImpl<>(list2,pageable,list.size());
-			return userRepository.findAll(pageable);
+			List<User> users = u.get().getShortlisted();
+			int start = (int)pageable.getOffset();
+			int end = (start + pageable.getPageSize()) > users.size() ? users.size() : (start + pageable.getPageSize());
+			List<User> list = users.subList(start, end);
+		    Collections.sort(list,Collections.reverseOrder());
+			Page<User> page = new PageImpl<>(list,pageable,users.size());
+			return page;
 		}
 		return null;
 	}

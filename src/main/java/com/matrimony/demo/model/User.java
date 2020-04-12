@@ -23,7 +23,7 @@ import org.springframework.validation.annotation.Validated;
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
 		@UniqueConstraint(columnNames = "email"), @UniqueConstraint(columnNames = "phoneNumber") })
-public class User extends DateAudit {
+public class User extends DateAudit implements Comparable{
 
 	@Id
 	@NaturalId
@@ -192,13 +192,13 @@ public class User extends DateAudit {
 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
 	private AstroProfile astroProfile;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
 	private CareerProfile careerProfile;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
 	private FamilyProfile familyProfile;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
 	private PartnerPreference partnerPreference;
 
@@ -241,12 +241,12 @@ public class User extends DateAudit {
 	public void setPartnerPreference(PartnerPreference partnerPreference) {
 		this.partnerPreference = partnerPreference;
 	}
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_shortlisted", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "shortlisted_id"))
 	@JsonIgnore
 	private List<User> shortlisted;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_shortlisted", joinColumns = @JoinColumn(name = "shortlisted_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	@JsonIgnore
@@ -268,7 +268,15 @@ public class User extends DateAudit {
 		this.shortlistedOf = shortlistedOf;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return ((User) obj).getId().equals(getId());
+	}
 
-
+	@Override
+	public int compareTo(Object o) {
+		User u = (User) o;
+		return getId().compareTo(u.getId());
+	}
 
 }
