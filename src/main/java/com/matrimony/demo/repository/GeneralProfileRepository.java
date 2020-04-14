@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.matrimony.demo.model.Profile;
 
 @Repository
-public interface ProfileRepository extends JpaRepository<Profile,Long>{
+public interface GeneralProfileRepository extends JpaRepository<Profile,Long>{
 
 }

@@ -2,7 +2,6 @@ package com.matrimony.demo.config;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +9,11 @@ import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 @Configuration
-@EnableSolrRepositories(basePackages = {"com.matrimony.demo.repository"}, namedQueriesLocation = "classpath:solr-named-queries.properties)")
+@EnableSolrRepositories(basePackages = {"com.matrimony.demo.repository.solr"})
 @ComponentScan
 public class SolrConfig {
 
-	@Value("spring.data.solr.host") String solrURL;
+	String solrURL="http://localhost:8983/solr";
 
 	@Bean
 	public SolrClient solrClient() {

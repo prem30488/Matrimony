@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 import com.matrimony.demo.exception.ResourceNotFoundException;
 import com.matrimony.demo.model.Profile;
 import com.matrimony.demo.model.User;
-import com.matrimony.demo.repository.ProfileRepository;
+import com.matrimony.demo.repository.GeneralProfileRepository;
 import com.matrimony.demo.repository.UserRepository;
 
 @Service
 public class ProfileService {
 
 	@Autowired
-	private ProfileRepository profileRepository;
+	private GeneralProfileRepository profileRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
