@@ -53,7 +53,7 @@ public class PartnerPreferenceService {
                 	partnerPreference.setMotherTounge(partnerPreferenceRequest.getMotherTounge());
                 	partnerPreference.setEducation(partnerPreferenceRequest.getEducation());
                 	partnerPreference.setOccupation(partnerPreferenceRequest.getOccupation());
-                	partnerPreference.setLocation(partnerPreferenceRequest.getOccupation());
+                	partnerPreference.setLocationOfHome(partnerPreferenceRequest.getLocationOfHome());
                 	partnerPreference.setState(partnerPreferenceRequest.getState());
                 	partnerPreference.setResidencyStatus(partnerPreferenceRequest.getResidencyStatus());
                 	if(userRepository.existsById(id)) {

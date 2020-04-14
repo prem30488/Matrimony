@@ -12,18 +12,22 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.NaturalId;
+import org.springframework.data.solr.core.mapping.Indexed;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.matrimony.demo.model.audit.DateAudit;
 
 @Entity
 @Table(name = "partnerPreference", uniqueConstraints = { @UniqueConstraint(columnNames = { "id" }) })
+@SolrDocument(solrCoreName = "matrimony")
 public class PartnerPreference extends DateAudit {
 
 	@Id
 	@NaturalId
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@Indexed(name = "id", type = "int")
 	private Long id;
 	
 	@OneToOne(fetch = FetchType.LAZY)
@@ -31,36 +35,52 @@ public class PartnerPreference extends DateAudit {
 	@JsonIgnore
 	private User user;
 	
+	@Indexed(name = "age", type = "string")
 	private String age;
 	
+	@Indexed(name = "maritalStatus", type = "string")
 	private String maritalStatus;
 	
+	@Indexed(name = "bodyType", type = "string")
 	private String bodyType;
 	
+	@Indexed(name = "complexion", type = "string")
 	private String complexion;
 	
+	@Indexed(name = "height", type = "string")
 	private String height;
 	
+	@Indexed(name = "diet", type = "string")
 	private String diet;
 	
+	@Indexed(name = "manglik", type = "string")
 	private boolean manglik;
 	
+	@Indexed(name = "mangal", type = "string")
 	private boolean mangal;
 	
+	@Indexed(name = "religion", type = "string")
 	private String religion;
 	
+	@Indexed(name = "caste", type = "string")
 	private String caste;
 	
+	@Indexed(name = "motherTounge", type = "string")
 	private String motherTounge;
 	
+	@Indexed(name = "education", type = "string")
 	private String education;
 	
+	@Indexed(name = "occupation", type = "string")
 	private String occupation;
 	
-	private String location;
+	@Indexed(name = "locationOfHome", type = "string")
+	private String locationOfHome;
 	
+	@Indexed(name = "state", type = "string")
 	private String state;
 	
+	@Indexed(name = "residencyStatus", type = "string")
 	private String residencyStatus;
 
 	public Long getId() {
@@ -183,12 +203,12 @@ public class PartnerPreference extends DateAudit {
 		this.occupation = occupation;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getLocationOfHome() {
+		return locationOfHome;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocationOfHome(String locationOfHome) {
+		this.locationOfHome = locationOfHome;
 	}
 
 	public String getState() {
