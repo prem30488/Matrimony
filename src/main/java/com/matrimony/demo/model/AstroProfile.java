@@ -32,9 +32,9 @@ public class AstroProfile extends DateAudit {
 	@Column(name = "id")
     private Long id;
 	
-	private Instant dateOfBirth;
+	private String dateOfBirth;
 	
-	private Instant timeOfBirth;
+	private String timeOfBirth;
 	
 	private String religion;
 	
@@ -42,7 +42,7 @@ public class AstroProfile extends DateAudit {
 	
 	private String subCaste;
 	
-	private String Raasi;
+	private String raasi;
 	
 	private boolean manglik;
 	
@@ -69,19 +69,19 @@ public class AstroProfile extends DateAudit {
 		this.id = id;
 	}
 
-	public Instant getDateOfBirth() {
+	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Instant dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public Instant getTimeOfBirth() {
+	public String getTimeOfBirth() {
 		return timeOfBirth;
 	}
 
-	public void setTimeOfBirth(Instant timeOfBirth) {
+	public void setTimeOfBirth(String timeOfBirth) {
 		this.timeOfBirth = timeOfBirth;
 	}
 
@@ -110,11 +110,11 @@ public class AstroProfile extends DateAudit {
 	}
 
 	public String getRaasi() {
-		return Raasi;
+		return raasi;
 	}
 
 	public void setRaasi(String raasi) {
-		Raasi = raasi;
+		this.raasi = raasi;
 	}
 
 	public boolean isManglik() {

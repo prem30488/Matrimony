@@ -1,6 +1,6 @@
 spring:
     datasource:
-        url: jdbc:postgresql://localhost:5432/matrimony?useSSL=false
+        url: jdbc:postgresql://localhost:5433/matrimony?useSSL=false
         username: postgres
         password: postgres
     jpa:

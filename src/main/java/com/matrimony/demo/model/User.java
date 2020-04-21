@@ -71,6 +71,8 @@ public class User extends DateAudit implements Comparable{
 	@Column(nullable = false)
 	@Size(min = 10, max = 40)
 	private String phoneNumber;
+	
+	private boolean premium;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -277,6 +279,14 @@ public class User extends DateAudit implements Comparable{
 	public int compareTo(Object o) {
 		User u = (User) o;
 		return getId().compareTo(u.getId());
+	}
+
+	public boolean isPremium() {
+		return premium;
+	}
+
+	public void setPremium(boolean premium) {
+		this.premium = premium;
 	}
 
 }
