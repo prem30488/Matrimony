@@ -23,7 +23,7 @@ public interface SolrSearchEntityRepository extends SolrCrudRepository<SolrSearc
 	@Query("age:*?0*")
 	Page<SolrSearchEntity> findBySolrSearchEntityAge(String searchTerm, Pageable pageable);
 
-	@Query("id:*?0* OR age:*?0* OR maritalStatus:*?0*")
+	@Query("id:*?0* OR age:*?0* OR maritalStatus:*?0* OR email:*?0*")
 	Page<SolrSearchEntity> findByCustomerQuery(String searchTerm, Pageable pageable);
 
 	@Highlight(prefix = "<b>", postfix = "</b>")
