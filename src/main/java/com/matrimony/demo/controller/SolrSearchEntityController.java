@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.matrimony.demo.repository.solr.SolrSearchEntityRepository;
+import com.matrimony.demo.security.CurrentUser;
+import com.matrimony.demo.security.UserPrincipal;
+import com.matrimony.demo.service.ShortlistService;
 import com.matrimony.demo.solrmodel.SolrSearchEntity;
 
 @RestController
@@ -27,6 +30,9 @@ public class SolrSearchEntityController {
 	
 	@Autowired
 	SolrSearchEntityRepository solrSearchEntityRepository;
+	
+	@Autowired
+	private ShortlistService shortlistService;
 	
 	@PostMapping("/solrSearchEntity")
 	public String createsolrSearchEntity(@RequestBody SolrSearchEntity solrSearchEntity){
@@ -65,8 +71,10 @@ public class SolrSearchEntityController {
 	}
 	
 	@RequestMapping("/solrSearchEntity/getAll")
-	 public Page<SolrSearchEntity> getAllDocs(Pageable pageable) {
-	       return this.solrSearchEntityRepository.findAll(pageable);
+	 public Page<SolrSearchEntity> getAllDocs(@CurrentUser UserPrincipal userPrincipal,Pageable pageable) {
+		Page<SolrSearchEntity> tempList =this.solrSearchEntityRepository.findAll(pageable);
+		tempList.stream().forEach((item) -> item.setIsShortlisted(shortlistService.isShortlisted(userPrincipal,item.getId())));
+		return tempList;
 	 
 	 }
 }

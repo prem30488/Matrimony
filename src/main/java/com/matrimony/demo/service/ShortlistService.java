@@ -1,5 +1,6 @@
 package com.matrimony.demo.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -51,5 +52,16 @@ public class ShortlistService {
 			return page;
 		}
 		return null;
+	}
+	
+	public Boolean isShortlisted(UserPrincipal userPrincipal, Long id) {
+		Optional<User> u = userRepository.findById(userPrincipal.getId());
+		Boolean isShortlisted = false;
+		if(u.isPresent()) {
+			if (u.get().getShortlisted().contains(userRepository.findById(id).get()) || u.get().getId() == id) {
+				isShortlisted= true;
+			}
+		}
+		return isShortlisted;
 	}
 }

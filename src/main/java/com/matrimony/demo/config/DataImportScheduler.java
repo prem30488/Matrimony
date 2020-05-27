@@ -45,7 +45,7 @@ public class DataImportScheduler {
 			@Override
 			public SolrResponse doInSolr(SolrClient solrClient) throws SolrServerException, IOException {
 				// TODO Auto-generated method stub
-				SolrRequest request = new SolrRequest(METHOD.GET, "/dataimport?command=status") {
+				SolrRequest request = new SolrRequest(METHOD.GET, "/dataimport?command=full-import") {
 					
 					@Override
 					public SolrParams getParams() {

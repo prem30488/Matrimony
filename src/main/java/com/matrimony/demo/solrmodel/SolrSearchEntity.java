@@ -12,7 +12,7 @@ public class SolrSearchEntity {
 
 	@Id
 	@Indexed(name = "id", type = "String")
-	private String id;
+	private Long id;
 	
 	@Indexed(name = "age", type = "string")
 	private String age;
@@ -131,11 +131,15 @@ public class SolrSearchEntity {
 	@Indexed(name = "profile_created_by", type = "string")
 	private String profileCreatedBy;
 	
-	public String getId() {
+	private Boolean isShortlisted;
+	
+	private String name;
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -451,6 +455,22 @@ public class SolrSearchEntity {
 
 	public void setProfileCreatedBy(String profileCreatedBy) {
 		this.profileCreatedBy = profileCreatedBy;
+	}
+
+	public Boolean getIsShortlisted() {
+		return isShortlisted;
+	}
+
+	public void setIsShortlisted(Boolean isShortlisted) {
+		this.isShortlisted = isShortlisted;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	
