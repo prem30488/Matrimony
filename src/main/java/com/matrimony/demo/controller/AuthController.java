@@ -97,6 +97,7 @@ public class AuthController {
 
 		Profile profile = new Profile();
 		user.setProfile(profile);
+		profile.setCreatedBy("Self");
 		profile.setUser(user);
 		
 		AstroProfile astroProfile = new AstroProfile();

@@ -48,6 +48,8 @@ public class AstroProfile extends DateAudit {
 	
 	private boolean mangal;
 	
+	private String placeOfBirth;
+	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
 	@JsonIgnore
@@ -131,6 +133,14 @@ public class AstroProfile extends DateAudit {
 
 	public void setMangal(boolean mangal) {
 		this.mangal = mangal;
+	}
+
+	public String getPlaceOfBirth() {
+		return placeOfBirth;
+	}
+
+	public void setPlaceOfBirth(String placeOfBirth) {
+		this.placeOfBirth = placeOfBirth;
 	}
 	
 	

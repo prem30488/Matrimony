@@ -55,7 +55,6 @@ public class ShortlistController {
 	{
 		com.matrimony.demo.payload.isShortlisted obj = new com.matrimony.demo.payload.isShortlisted();
 		obj.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, shortlist.getId()));
-		//System.out.println("For ID :"+ shortlist.getId() + " the result is :" +obj.getIsShortlisted());
 		return obj;
 	}
 }
