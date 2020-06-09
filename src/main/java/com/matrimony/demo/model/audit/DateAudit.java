@@ -9,6 +9,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Date;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -22,6 +23,10 @@ public abstract class DateAudit implements Serializable {
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
+    @CreatedDate
+    @Column(updatable = false)
+    private Date createdDate;
+    
     @LastModifiedDate
     @Column(nullable = false)
     private Instant updatedAt;
@@ -41,4 +46,14 @@ public abstract class DateAudit implements Serializable {
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+    
+    
 }

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.NaturalId;
@@ -77,6 +78,10 @@ public class Profile extends DateAudit {
 	@JsonIgnore
 	private User user;
 
+	@Transient
+	@JsonIgnore
+	private Integer count;
+	
 	public Long getId() {
 		return id;
 	}
@@ -235,6 +240,14 @@ public class Profile extends DateAudit {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 
 	

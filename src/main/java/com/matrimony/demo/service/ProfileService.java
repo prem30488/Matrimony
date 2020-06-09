@@ -1,5 +1,8 @@
 package com.matrimony.demo.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.matrimony.demo.exception.ResourceNotFoundException;
 import com.matrimony.demo.model.Profile;
 import com.matrimony.demo.model.User;
+import com.matrimony.demo.payload.MaritalStatusPayload;
 import com.matrimony.demo.repository.GeneralProfileRepository;
 import com.matrimony.demo.repository.UserRepository;
 
@@ -74,6 +78,15 @@ public class ProfileService {
 	public Profile fetchProfileById(Long id) {
 		return profileRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Profile not found with ", "id " , id));
+	}
+	
+	public List<Object> fetchDistinctmaritalStatus(){
+		List<Object> list = profileRepository.getDistinctMaritalStatus();
+		//List<MaritalStatusPayload> result = new ArrayList<MaritalStatusPayload>();
+		//list.forEach(profile -> {
+		  //  result.add(new MaritalStatusPayload(profile.getMaritalStatus(), profile.getCount()));
+		//});
+		return list;
 	}
 	
 }

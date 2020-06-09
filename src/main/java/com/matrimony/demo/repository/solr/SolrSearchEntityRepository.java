@@ -1,6 +1,9 @@
 package com.matrimony.demo.repository.solr;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +17,7 @@ import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 import org.springframework.stereotype.Repository;
 
+import com.matrimony.demo.model.User;
 import com.matrimony.demo.solrmodel.SolrSearchEntity;
 
 @Repository
@@ -32,6 +36,20 @@ public interface SolrSearchEntityRepository extends SolrCrudRepository<SolrSearc
 			"residencyStatus" }, defaultOperator = Operator.AND)
 	HighlightPage<SolrSearchEntity> findByStateIn(Collection<String> states, Pageable page);
 
-	@Facet(fields = { "maritalStatus" })
-	FacetPage<SolrSearchEntity> findByMaritalStatusStartsWith(Collection<String> maritalStatuses, Pageable pagebale);
+	
+	Page<SolrSearchEntity> findByMaritalStatusStartingWith(String maritalStatuses, Pageable pagebale);
+	
+	
+//	@Query(fields = { "id", "age", "maritalStatus", "bodyType", "complexion", "height", "diet", "manglik", "mangal",
+//			"religion", "caste", "motherTounge", "education", "occupation", "locationOfHome", "state",
+//			"residencyStatus" },defaultOperator =  Operator.NONE)
+//			"where u.created_date between \':weekStartDate\' and \'weekEndDate\' " + 
+//			"order by date_trunc('week', u.created_date) desc ")
+	//@Query("createdAt:[?0 TO ?1]")
+    List<SolrSearchEntity> findByCreatedAtBetweenOrderByCreatedAtDesc(Date weekStartDate, Date weekEndDate);
+    
+    List<SolrSearchEntity> findByImageUrlIsNotNullOrderByIdDesc();
+
+	Page<SolrSearchEntity> findByMaritalStatusIn(Collection<String> maritalStatuses, Pageable pagebale);
+
 }

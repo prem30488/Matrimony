@@ -1,6 +1,8 @@
 package com.matrimony.demo.controller;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -36,6 +38,7 @@ import com.matrimony.demo.model.Role;
 import com.matrimony.demo.model.RoleName;
 import com.matrimony.demo.model.User;
 import com.matrimony.demo.payload.ApiResponse;
+import com.matrimony.demo.payload.MaritalStatusPayload;
 import com.matrimony.demo.payload.SignUpRequest;
 import com.matrimony.demo.payload.UserIdentityAvailability;
 import com.matrimony.demo.payload.UserProfile;
@@ -82,6 +85,11 @@ public class GeneralProfileController {
 	@GetMapping("/user/profile/{id}")
 	public Profile fetchProfileById(@PathVariable Long id) {
 		return profileService.fetchProfileById(id);
+	}
+	
+	@GetMapping("/user/profile/getDistinctMaritalStatus")
+	public List<Object> getDistinctMaritalStatus() {
+		return profileService.fetchDistinctmaritalStatus();
 	}
 
 }

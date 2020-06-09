@@ -128,6 +128,9 @@ public class SolrSearchEntity {
 	@Indexed(name = "username", type = "string")
 	private String username;
 	
+	@Indexed(name = "image_url", type = "string")
+	private String imageUrl;
+	
 	@Indexed(name = "profile_created_by", type = "string")
 	private String profileCreatedBy;
 	
@@ -471,6 +474,14 @@ public class SolrSearchEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 	
 	

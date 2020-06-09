@@ -1,9 +1,13 @@
 package com.matrimony.demo.controller;
 
 import java.net.URI;
+import java.time.DayOfWeek;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
@@ -48,6 +52,7 @@ import com.matrimony.demo.repository.RoleRepository;
 import com.matrimony.demo.repository.UserRepository;
 import com.matrimony.demo.security.CurrentUser;
 import com.matrimony.demo.security.UserPrincipal;
+import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
 @RestController
 @CrossOrigin("*")
@@ -186,6 +191,24 @@ public class UserController {
 	public User fetchUserById(@PathVariable Long userId) {
 		return userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found with ", "id", userId));
+	}
+	
+	@GetMapping("/user/users/weekly")
+	public Integer fetchUserCountWeekly() {
+	    Integer count = userRepository.weeklyCount().get(0);
+		return count>0?count:0;
+	}
+	
+	@GetMapping("/user/users/monthly")
+	public Integer fetchUserCountMonthly() {
+	    Integer count = userRepository.monthlyCount().get(0);
+		return count>0?count:0;
+	}
+	
+	@GetMapping("/user/users/countwithImage")
+	public Integer fetchUserwithImage() {
+	    Integer count = userRepository.getCountWithImage().get(0);
+		return count>0?count:0;
 	}
 
 }
