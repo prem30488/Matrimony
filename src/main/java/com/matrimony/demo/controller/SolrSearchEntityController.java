@@ -7,6 +7,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.FacetPage;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +26,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.matrimony.demo.payload.MaritalStatusPayload;
 import com.matrimony.demo.repository.solr.SolrSearchEntityRepository;
 import com.matrimony.demo.security.CurrentUser;
 import com.matrimony.demo.security.UserPrincipal;
 import com.matrimony.demo.service.ShortlistService;
 import com.matrimony.demo.solrmodel.SolrSearchEntity;
+import com.matrimony.demo.util.Wrapper;
 
 @RestController
 @CrossOrigin("*")
@@ -128,9 +134,45 @@ public class SolrSearchEntityController {
 		return solrSearchEntityRepository.findByImageUrlIsNotNullOrderByIdDesc();
 	}
 	
-	@GetMapping("/solrSearchEntity/findByMaritalStatusIn")
-	public Page<SolrSearchEntity> findByMaritalStatusIn(@RequestBody Collection<String> maritalStatus, Pageable pagebale) {
-		return solrSearchEntityRepository.findByMaritalStatusIn(maritalStatus, pagebale);
+	//@GetMapping("/solrSearchEntity/")
+	//public Page<SolrSearchEntity> findByMaritalStatusIn(@RequestBody Collection<String> jsonAsString, Pageable pagebale) {
+		//Collection<String> readValues = new ObjectMapper().readValue(
+			//    jsonAsString, new TypeReference<Collection<String>>() { }
+			//);
+		//return solrSearchEntityRepository.findByMaritalStatusIn(maritalStatus, pagebale);
+	//}
+	
+	@PostMapping("/solrSearchEntity/findByMaritalStatusIn")
+	public Page<SolrSearchEntity> setResources(@RequestBody Wrapper<MatrimonyCollection> wrappedResources,Pageable pageable) {
+	  List<MatrimonyCollection> resources = wrappedResources.getData();
+	  Collection<String> passValues = new HashSet<String>();
+	  for(MatrimonyCollection m : resources) {
+		  System.out.println(m.getMaritalStatus());
+		  passValues.add(m.getMaritalStatus());
+	  }
+	  return solrSearchEntityRepository.findByMaritalStatusIn(passValues,pageable);
+	  
 	}
 	
+	public static class MatrimonyCollection{
+		String maritalStatus;
+
+		public MatrimonyCollection() {
+			super();
+		}
+
+		public MatrimonyCollection(String maritalStatus) {
+			super();
+			this.maritalStatus = maritalStatus;
+		}
+
+		public String getMaritalStatus() {
+			return maritalStatus;
+		}
+
+		public void setMaritalStatus(String maritalStatus) {
+			this.maritalStatus = maritalStatus;
+		}
+		
+	}
 }
