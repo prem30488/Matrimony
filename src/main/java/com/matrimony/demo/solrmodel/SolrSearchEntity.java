@@ -44,7 +44,7 @@ public class SolrSearchEntity {
 	@Indexed(name = "caste", type = "string")
 	private String caste;
 	
-	@Indexed(name = "mother_tounge", type = "string")
+	@Indexed(name = "mother_toung", type = "string")
 	private String motherTounge;
 	
 	@Indexed(name = "education", type = "string")

@@ -40,6 +40,25 @@ public class ShortlistService {
 		return false;
 	}
 
+	public Boolean unshortlistUser(UserPrincipal userPrincipal, Long id) {
+		if (userRepository.existsById(id)) {
+			Optional<User> u = userRepository.findById(userPrincipal.getId());
+			if (u.isPresent()) {
+				List<User> shortlistedUsers = u.get().getShortlisted();
+				if (u.get().getShortlisted().contains(userRepository.findById(id).get()) || u.get().getId() == id) {					
+					for(int i=0;i<shortlistedUsers.size();i++) {
+						if(shortlistedUsers.get(i).getId() == id) {
+							u.get().getShortlisted().remove(i);
+						}
+					}
+					userRepository.save(u.get());
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public Page<User> getShortlistedProfiles(Pageable pageable,UserPrincipal userPrincipal) {
 		Optional<User> u = userRepository.findById(userPrincipal.getId());
 		if (u.isPresent()) {
@@ -64,4 +83,5 @@ public class ShortlistService {
 		}
 		return isShortlisted;
 	}
+
 }

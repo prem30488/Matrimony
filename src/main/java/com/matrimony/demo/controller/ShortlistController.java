@@ -44,6 +44,11 @@ public class ShortlistController {
 		return shortlistService.shortlistUser(userPrincipal,shortlist.getId());
 	}
 	
+	@PostMapping("/user/profile/unshortlist")
+	public Boolean unshortlist(@CurrentUser UserPrincipal userPrincipal,@RequestBody Shortlist shortlist) {
+		return shortlistService.unshortlistUser(userPrincipal,shortlist.getId());
+	}
+	
 	@GetMapping("/user/profile/getShortlistedProfiles")
 	public Page<User> getProfiles(@PageableDefault(size=1) Pageable pageable,@CurrentUser UserPrincipal userPrincipal) {
 		return shortlistService.getShortlistedProfiles(pageable,userPrincipal);

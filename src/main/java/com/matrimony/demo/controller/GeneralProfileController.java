@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -91,5 +92,35 @@ public class GeneralProfileController {
 	public List<Object> getDistinctMaritalStatus() {
 		return profileService.fetchDistinctmaritalStatus();
 	}
+	
+	@GetMapping("/user/profile/getDistinctMotherTounge")
+	public List<Object> getDistinctMotherTounge() {
+		return profileService.fetchDistinctmotherTounge();
+	}
 
+	@GetMapping("/user/profile/getDistinctEducation")
+	public List<Object> getDistinctEducation() {
+		return profileService.fetchDistincteducation();
+	}
+	
+	@GetMapping("/user/profile/getDistinctPhysicalStatus")
+	public List<Object> getDistinctPhysicalStatus() {
+		return profileService.fetchDistinctPhysicalStatuses();
+	}
+	
+	@GetMapping("/user/profile/getDistinctDiet")
+	public List<Object> getDistinctDiet() {
+		return profileService.fetchDistinctDietes();
+	}
+	
+	@GetMapping("/user/profile/getDistinctSmoke")
+	public List<Object> getDistinctSmoke() {
+		return profileService.fetchDistinctSmoke();
+	}
+	
+	@GetMapping("/user/profile/getDistinctDrink")
+	public List<Object> getDistinctDrink() {
+		return profileService.fetchDistinctDrink();
+	}
+	
 }

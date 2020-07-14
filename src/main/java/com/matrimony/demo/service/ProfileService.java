@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -88,5 +89,35 @@ public class ProfileService {
 		//});
 		return list;
 	}
-	
+
+	public List<Object> fetchDistinctmotherTounge() {
+		List<Object> list = profileRepository.getDistinctMotherToung();
+		return list;
+	}
+
+	public List<Object> fetchDistincteducation() {
+		List<Object> list = profileRepository.getDistinctEducation();
+		return list;
+	}
+
+	public List<Object> fetchDistinctPhysicalStatuses() {
+		List<Object> list = profileRepository.getDistinctPhysicalStatus();
+		return list;
+	}
+
+	public List<Object> fetchDistinctDietes() {
+		List<Object> list = profileRepository.getDistinctDiet();
+		return list;
+	}
+
+	public List<Object> fetchDistinctSmoke() {
+		List<Object> list = profileRepository.getDistinctSmoke();
+		return list;
+	}
+
+	public List<Object> fetchDistinctDrink() {
+		List<Object> list = profileRepository.getDistinctDrink();
+		return list;
+	}
+
 }

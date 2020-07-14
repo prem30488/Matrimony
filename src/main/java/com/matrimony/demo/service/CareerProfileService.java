@@ -1,5 +1,6 @@
 package com.matrimony.demo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -7,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,5 +68,11 @@ public class CareerProfileService {
 		return careerProfileRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Career Profile not found with ", "id " , id));
 	}
+
+	public List<Object> fetchDistinctOccupation() {
+		List<Object> list = careerProfileRepository.getDistinctOccupation();
+		return list;
+	}
+	
 	
 }

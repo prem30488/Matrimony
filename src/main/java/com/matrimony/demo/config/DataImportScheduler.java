@@ -36,7 +36,8 @@ public class DataImportScheduler {
     @Autowired
     private SolrTemplate solrTemplate;
 
-    @Scheduled(fixedDelayString = "35000" )
+    //@Scheduled(fixedDelayString = "35000" )
+    @Scheduled(fixedDelayString = "350000000000000000" )
     public void importData() {
         //logger.info("Solr Full Data Import Started");
 
@@ -78,10 +79,9 @@ public class DataImportScheduler {
 				 connection.connect();
 
 				 InputStream stream = connection.getInputStream();
-				request.setResponseParser(new QESXMLResponseParser());
-			    return request.process(solrClient,"UserProfile");
+				 request.setResponseParser(new QESXMLResponseParser());
+			     return request.process(solrClient,"UserProfile");
     	};    	  
-        //logger.info("Solr Full Data Import Completed");
     });
 }
 }

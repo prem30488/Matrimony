@@ -130,8 +130,8 @@ public class SolrSearchEntityController {
 	}
 
 	@GetMapping("/solrSearchEntity/findByImageUrlIsNotNullOrderByIdDesc")
-	public List<SolrSearchEntity> getImageExistssolrSearchEntity() {
-		return solrSearchEntityRepository.findByImageUrlIsNotNullOrderByIdDesc();
+	public List<SolrSearchEntity> getImageExistssolrSearchEntity(Pageable pageable) {
+		return solrSearchEntityRepository.findByImageUrlIsNotNullOrderByIdDesc(pageable);
 	}
 	
 	//@GetMapping("/solrSearchEntity/")
@@ -143,15 +143,92 @@ public class SolrSearchEntityController {
 	//}
 	
 	@PostMapping("/solrSearchEntity/findByMaritalStatusIn")
-	public Page<SolrSearchEntity> setResources(@RequestBody Wrapper<MatrimonyCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByMaritalStatusIn(@RequestBody Wrapper<MatrimonyCollection> wrappedResources,Pageable pageable) {
 	  List<MatrimonyCollection> resources = wrappedResources.getData();
 	  Collection<String> passValues = new HashSet<String>();
 	  for(MatrimonyCollection m : resources) {
-		  System.out.println(m.getMaritalStatus());
 		  passValues.add(m.getMaritalStatus());
 	  }
-	  return solrSearchEntityRepository.findByMaritalStatusIn(passValues,pageable);
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByMaritalStatusIn(passValues,pageable);	  
+	  return result;
 	  
+	}
+	
+	@PostMapping("/solrSearchEntity/findByMotherToungeIn")
+	public Page<SolrSearchEntity> findByMotherToungeIn(@RequestBody Wrapper<MotherToungeCollection> wrappedResources,Pageable pageable) {
+	  List<MotherToungeCollection> resources = wrappedResources.getData();
+	  Collection<String> passValuesMotherTounge = new HashSet<String>();
+	  for(MotherToungeCollection mT : resources) {
+		  passValuesMotherTounge.add(mT.getMotherTounge());
+	  }
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByMotherToungeIn(passValuesMotherTounge,pageable);
+	  return result;
+	}
+	
+	@PostMapping("/solrSearchEntity/findByEducationIn")
+	public Page<SolrSearchEntity> findByEducationIn(@RequestBody Wrapper<EducationCollection> wrappedResources,Pageable pageable) {
+	  List<EducationCollection> resources = wrappedResources.getData();
+	  Collection<String> educations = new HashSet<String>();
+	  for(EducationCollection m : resources) {
+		  educations.add(m.getEducation());
+	  }
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByEducationIn(educations,pageable);
+	  return result;
+	}
+	
+	@PostMapping("/solrSearchEntity/findByOccupationIn")
+	public Page<SolrSearchEntity> findByOccupationIn(@RequestBody Wrapper<OccupationCollection> wrappedResources,Pageable pageable) {
+	  List<OccupationCollection> resources = wrappedResources.getData();
+	  Collection<String> occupations = new HashSet<String>();
+	  for(OccupationCollection m : resources) {
+		  occupations.add(m.getOccupation());
+	  }
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByOccupationIn(occupations,pageable);
+	  return result;
+	}
+	
+	@PostMapping("/solrSearchEntity/findByPhysicalStatusIn")
+	public Page<SolrSearchEntity> findByPhysicalStatusIn(@RequestBody Wrapper<PhysicalStatusCollection> wrappedResources,Pageable pageable) {
+	  List<PhysicalStatusCollection> resources = wrappedResources.getData();
+	  Collection<String> physicalStatuses = new HashSet<String>();
+	  for(PhysicalStatusCollection p : resources) {
+		  physicalStatuses.add(p.getPhysicalStatus());
+	  }
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByPhysicalStatusIn(physicalStatuses,pageable);
+	  return result;
+	}
+	
+	@PostMapping("/solrSearchEntity/findByDietIn")
+	public Page<SolrSearchEntity> findByDietStatusIn(@RequestBody Wrapper<DietCollection> wrappedResources,Pageable pageable) {
+	  List<DietCollection> resources = wrappedResources.getData();
+	  Collection<String> dietes = new HashSet<String>();
+	  for(DietCollection d : resources) {
+		  dietes.add(d.getDiet());
+	  }
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByDietIn(dietes,pageable);
+	  return result;
+	}
+	
+	@PostMapping("/solrSearchEntity/findBySmokeIn")
+	public Page<SolrSearchEntity> findByDietSmokeIn(@RequestBody Wrapper<SmokeCollection> wrappedResources,Pageable pageable) {
+	  List<SmokeCollection> resources = wrappedResources.getData();
+	  Collection<String> smokers = new HashSet<String>();
+	  for(SmokeCollection smoker : resources) {
+		  smokers.add(smoker.getSmoke());
+	  }
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findBySmokeIn(smokers,pageable);
+	  return result;
+	}
+	
+	@PostMapping("/solrSearchEntity/findByDrinkIn")
+	public Page<SolrSearchEntity> findByDietDrinkIn(@RequestBody Wrapper<DrinkCollection> wrappedResources,Pageable pageable) {
+	  List<DrinkCollection> resources = wrappedResources.getData();
+	  Collection<String> drinkers = new HashSet<String>();
+	  for(DrinkCollection drinker : resources) {
+		  drinkers.add(drinker.getDrink());
+	  }
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByDrinkIn(drinkers,pageable);
+	  return result;
 	}
 	
 	public static class MatrimonyCollection{
@@ -175,4 +252,160 @@ public class SolrSearchEntityController {
 		}
 		
 	}
+	
+	public static class MotherToungeCollection{
+		String motherTounge;
+
+		public MotherToungeCollection() {
+			super();
+		}
+
+		public MotherToungeCollection(String motherTounge) {
+			super();
+			this.motherTounge = motherTounge;
+		}
+
+		public String getMotherTounge() {
+			return motherTounge;
+		}
+
+		public void setMotherTounge(String motherTounge) {
+			this.motherTounge = motherTounge;
+		}
+		
+	}
+	
+	public static class EducationCollection{
+		String education;
+
+		public EducationCollection() {
+			super();
+		}
+
+		public EducationCollection(String education) {
+			super();
+			this.education = education;
+		}
+
+		public String getEducation() {
+			return education;
+		}
+
+		public void setEducation(String education) {
+			this.education = education;
+		}
+		
+	}
+	
+	public static class OccupationCollection{
+		String occupation;
+
+		public OccupationCollection() {
+			super();
+		}
+
+		public OccupationCollection(String occupation) {
+			super();
+			this.occupation = occupation;
+		}
+
+		public String getOccupation() {
+			return occupation;
+		}
+
+		public void setOccupation(String occupation) {
+			this.occupation = occupation;
+		}
+		
+	}
+	
+	public static class PhysicalStatusCollection{
+		String physicalStatus;
+
+		public PhysicalStatusCollection() {
+			super();
+		}
+
+		public PhysicalStatusCollection(String physicalStatus) {
+			super();
+			this.physicalStatus = physicalStatus;
+		}
+
+		public String getPhysicalStatus() {
+			return physicalStatus;
+		}
+
+		public void setPhysicalStatus(String physicalStatus) {
+			this.physicalStatus = physicalStatus;
+		}
+		
+	}
+
+	public static class DietCollection{
+		String diet;
+
+		public DietCollection() {
+			super();
+		}
+
+		public DietCollection(String diet) {
+			super();
+			this.diet = diet;
+		}
+
+		public String getDiet() {
+			return diet;
+		}
+
+		public void setDiet(String diet) {
+			this.diet = diet;
+		}
+		
+	}
+	
+	public static class SmokeCollection{
+		String smoke;
+
+		public SmokeCollection() {
+			super();
+		}
+
+		public SmokeCollection(String smoke) {
+			super();
+			this.smoke = smoke;
+		}
+
+		public String getSmoke() {
+			return smoke;
+		}
+
+		public void setSmoke(String smoke) {
+			this.smoke = smoke;
+		}
+		
+	}
+	
+	public static class DrinkCollection{
+		String drink;
+
+		public DrinkCollection() {
+			super();
+		}
+
+		public DrinkCollection(String drink) {
+			super();
+			this.drink = drink;
+		}
+
+		public String getDrink() {
+			return drink;
+		}
+
+		public void setDrink(String drink) {
+			this.drink = drink;
+		}
+		
+	}
+	
+	
 }

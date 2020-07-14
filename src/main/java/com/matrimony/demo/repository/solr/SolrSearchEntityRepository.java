@@ -48,8 +48,22 @@ public interface SolrSearchEntityRepository extends SolrCrudRepository<SolrSearc
 	//@Query("createdAt:[?0 TO ?1]")
     List<SolrSearchEntity> findByCreatedAtBetweenOrderByCreatedAtDesc(Date weekStartDate, Date weekEndDate);
     
-    List<SolrSearchEntity> findByImageUrlIsNotNullOrderByIdDesc();
+    List<SolrSearchEntity> findByImageUrlIsNotNullOrderByIdDesc(Pageable pagebale);
 
 	Page<SolrSearchEntity> findByMaritalStatusIn(Collection<String> maritalStatuses, Pageable pagebale);
+	
+	Page<SolrSearchEntity> findByMotherToungeIn(Collection<String> motherToungs, Pageable pagebale);
+
+	Page<SolrSearchEntity> findByEducationIn(Collection<String> educations, Pageable pageable);
+
+	Page<SolrSearchEntity> findByOccupationIn(Collection<String> occupations, Pageable pageable);
+
+	Page<SolrSearchEntity> findByPhysicalStatusIn(Collection<String> physicalStatuses, Pageable pageable);
+
+	Page<SolrSearchEntity> findByDietIn(Collection<String> dietes, Pageable pageable);
+
+	Page<SolrSearchEntity> findBySmokeIn(Collection<String> smokers, Pageable pageable);
+
+	Page<SolrSearchEntity> findByDrinkIn(Collection<String> drinkers, Pageable pageable);
 
 }

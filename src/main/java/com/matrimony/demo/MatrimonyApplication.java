@@ -6,7 +6,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration;
 import org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration;
@@ -23,7 +25,7 @@ import com.matrimony.demo.config.AppProperties;
 		Jsr310JpaConverters.class 
 })
 @EnableJpaAuditing
-@SpringBootApplication ( exclude = {ContextRegionProviderAutoConfiguration.class, ContextStackAutoConfiguration.class, MessagingAutoConfiguration.class})
+@SpringBootApplication ( exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class,ContextRegionProviderAutoConfiguration.class, ContextStackAutoConfiguration.class, MessagingAutoConfiguration.class})
 public class MatrimonyApplication {
 
 	public static void main(String[] args) {
