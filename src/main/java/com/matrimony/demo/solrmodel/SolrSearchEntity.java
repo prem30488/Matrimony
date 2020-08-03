@@ -136,6 +136,8 @@ public class SolrSearchEntity {
 	
 	private Boolean isShortlisted;
 	
+	private Boolean isViewed;
+	
 	private String name;
 	
 	public Long getId() {
@@ -193,8 +195,6 @@ public class SolrSearchEntity {
 	public void setDiet(String diet) {
 		this.diet = diet;
 	}
-
-	
 
 	public String getManglik() {
 		return manglik;
@@ -482,6 +482,14 @@ public class SolrSearchEntity {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public Boolean getIsViewed() {
+		return isViewed;
+	}
+
+	public void setIsViewed(Boolean isViewed) {
+		this.isViewed = isViewed;
 	}
 	
 	

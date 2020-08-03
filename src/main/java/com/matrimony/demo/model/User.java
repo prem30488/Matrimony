@@ -248,12 +248,22 @@ public class User extends DateAudit implements Comparable{
 	@JoinTable(name = "user_shortlisted", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "shortlisted_id"))
 	@JsonIgnore
 	private List<User> shortlisted;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_viewed", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "viewed_id"))
+	@JsonIgnore
+	private List<User> viewed;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_shortlisted", joinColumns = @JoinColumn(name = "shortlisted_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	@JsonIgnore
 	private List<User> shortlistedOf;
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_viewed", joinColumns = @JoinColumn(name = "viewed_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@JsonIgnore
+	private List<User> viewedOf;
+	
 	public List<User> getShortlisted() {
 		return shortlisted;
 	}
@@ -287,6 +297,22 @@ public class User extends DateAudit implements Comparable{
 
 	public void setPremium(boolean premium) {
 		this.premium = premium;
+	}
+
+	public List<User> getViewed() {
+		return viewed;
+	}
+
+	public void setViewed(List<User> viewed) {
+		this.viewed = viewed;
+	}
+
+	public List<User> getViewedOf() {
+		return viewedOf;
+	}
+
+	public void setViewedOf(List<User> viewedOf) {
+		this.viewedOf = viewedOf;
 	}
 
 }

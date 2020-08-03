@@ -33,6 +33,7 @@ import com.matrimony.demo.repository.solr.SolrSearchEntityRepository;
 import com.matrimony.demo.security.CurrentUser;
 import com.matrimony.demo.security.UserPrincipal;
 import com.matrimony.demo.service.ShortlistService;
+import com.matrimony.demo.service.ViewService;
 import com.matrimony.demo.solrmodel.SolrSearchEntity;
 import com.matrimony.demo.util.Wrapper;
 
@@ -46,6 +47,9 @@ public class SolrSearchEntityController {
 
 	@Autowired
 	private ShortlistService shortlistService;
+	
+	@Autowired
+	private ViewService viewService;
 
 	@PostMapping("/solrSearchEntity")
 	public String createsolrSearchEntity(@RequestBody SolrSearchEntity solrSearchEntity) {
@@ -90,7 +94,11 @@ public class SolrSearchEntityController {
 	public Page<SolrSearchEntity> getAllDocs(@CurrentUser UserPrincipal userPrincipal, Pageable pageable) {
 		Page<SolrSearchEntity> tempList = this.solrSearchEntityRepository.findAll(pageable);
 		tempList.stream()
-				.forEach((item) -> item.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item.getId())));
+				.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+				
+		tempList.stream()
+				.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+		
 		return tempList;
 
 	}
@@ -130,104 +138,149 @@ public class SolrSearchEntityController {
 	}
 
 	@GetMapping("/solrSearchEntity/findByImageUrlIsNotNullOrderByIdDesc")
-	public List<SolrSearchEntity> getImageExistssolrSearchEntity(Pageable pageable) {
-		return solrSearchEntityRepository.findByImageUrlIsNotNullOrderByIdDesc(pageable);
+	public List<SolrSearchEntity> getImageExistssolrSearchEntity(@CurrentUser UserPrincipal userPrincipal, Pageable pageable) {
+		List<SolrSearchEntity> tempList= solrSearchEntityRepository.findByImageUrlIsNotNullOrderByIdDesc(pageable);
+		tempList.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		tempList.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));		
+		return tempList;
 	}
 	
-	//@GetMapping("/solrSearchEntity/")
-	//public Page<SolrSearchEntity> findByMaritalStatusIn(@RequestBody Collection<String> jsonAsString, Pageable pagebale) {
-		//Collection<String> readValues = new ObjectMapper().readValue(
-			//    jsonAsString, new TypeReference<Collection<String>>() { }
-			//);
-		//return solrSearchEntityRepository.findByMaritalStatusIn(maritalStatus, pagebale);
-	//}
-	
 	@PostMapping("/solrSearchEntity/findByMaritalStatusIn")
-	public Page<SolrSearchEntity> findByMaritalStatusIn(@RequestBody Wrapper<MatrimonyCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByMaritalStatusIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<MatrimonyCollection> wrappedResources,Pageable pageable) {
 	  List<MatrimonyCollection> resources = wrappedResources.getData();
 	  Collection<String> passValues = new HashSet<String>();
 	  for(MatrimonyCollection m : resources) {
 		  passValues.add(m.getMaritalStatus());
 	  }
-	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByMaritalStatusIn(passValues,pageable);	  
+	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByMaritalStatusIn(passValues,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	  
 	}
 	
 	@PostMapping("/solrSearchEntity/findByMotherToungeIn")
-	public Page<SolrSearchEntity> findByMotherToungeIn(@RequestBody Wrapper<MotherToungeCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByMotherToungeIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<MotherToungeCollection> wrappedResources,Pageable pageable) {
 	  List<MotherToungeCollection> resources = wrappedResources.getData();
 	  Collection<String> passValuesMotherTounge = new HashSet<String>();
 	  for(MotherToungeCollection mT : resources) {
 		  passValuesMotherTounge.add(mT.getMotherTounge());
 	  }
 	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByMotherToungeIn(passValuesMotherTounge,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	}
 	
 	@PostMapping("/solrSearchEntity/findByEducationIn")
-	public Page<SolrSearchEntity> findByEducationIn(@RequestBody Wrapper<EducationCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByEducationIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<EducationCollection> wrappedResources,Pageable pageable) {
 	  List<EducationCollection> resources = wrappedResources.getData();
 	  Collection<String> educations = new HashSet<String>();
 	  for(EducationCollection m : resources) {
 		  educations.add(m.getEducation());
 	  }
 	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByEducationIn(educations,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	}
 	
 	@PostMapping("/solrSearchEntity/findByOccupationIn")
-	public Page<SolrSearchEntity> findByOccupationIn(@RequestBody Wrapper<OccupationCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByOccupationIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<OccupationCollection> wrappedResources,Pageable pageable) {
 	  List<OccupationCollection> resources = wrappedResources.getData();
 	  Collection<String> occupations = new HashSet<String>();
 	  for(OccupationCollection m : resources) {
 		  occupations.add(m.getOccupation());
 	  }
 	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByOccupationIn(occupations,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	}
 	
 	@PostMapping("/solrSearchEntity/findByPhysicalStatusIn")
-	public Page<SolrSearchEntity> findByPhysicalStatusIn(@RequestBody Wrapper<PhysicalStatusCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByPhysicalStatusIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<PhysicalStatusCollection> wrappedResources,Pageable pageable) {
 	  List<PhysicalStatusCollection> resources = wrappedResources.getData();
 	  Collection<String> physicalStatuses = new HashSet<String>();
 	  for(PhysicalStatusCollection p : resources) {
 		  physicalStatuses.add(p.getPhysicalStatus());
 	  }
 	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByPhysicalStatusIn(physicalStatuses,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	}
 	
 	@PostMapping("/solrSearchEntity/findByDietIn")
-	public Page<SolrSearchEntity> findByDietStatusIn(@RequestBody Wrapper<DietCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByDietStatusIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<DietCollection> wrappedResources,Pageable pageable) {
 	  List<DietCollection> resources = wrappedResources.getData();
 	  Collection<String> dietes = new HashSet<String>();
 	  for(DietCollection d : resources) {
 		  dietes.add(d.getDiet());
 	  }
 	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByDietIn(dietes,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	}
 	
 	@PostMapping("/solrSearchEntity/findBySmokeIn")
-	public Page<SolrSearchEntity> findByDietSmokeIn(@RequestBody Wrapper<SmokeCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByDietSmokeIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<SmokeCollection> wrappedResources,Pageable pageable) {
 	  List<SmokeCollection> resources = wrappedResources.getData();
 	  Collection<String> smokers = new HashSet<String>();
 	  for(SmokeCollection smoker : resources) {
 		  smokers.add(smoker.getSmoke());
 	  }
 	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findBySmokeIn(smokers,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	}
 	
 	@PostMapping("/solrSearchEntity/findByDrinkIn")
-	public Page<SolrSearchEntity> findByDietDrinkIn(@RequestBody Wrapper<DrinkCollection> wrappedResources,Pageable pageable) {
+	public Page<SolrSearchEntity> findByDietDrinkIn(@CurrentUser UserPrincipal userPrincipal,@RequestBody Wrapper<DrinkCollection> wrappedResources,Pageable pageable) {
 	  List<DrinkCollection> resources = wrappedResources.getData();
 	  Collection<String> drinkers = new HashSet<String>();
 	  for(DrinkCollection drinker : resources) {
 		  drinkers.add(drinker.getDrink());
 	  }
 	  Page<SolrSearchEntity> result = solrSearchEntityRepository.findByDrinkIn(drinkers,pageable);
+	  result.stream()
+		.forEach((item) -> item.setIsViewed(viewService.isViewed(userPrincipal, item.getId())));
+		
+	  result.stream()
+		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
+
 	  return result;
 	}
 	
@@ -406,6 +459,5 @@ public class SolrSearchEntityController {
 		}
 		
 	}
-	
 	
 }

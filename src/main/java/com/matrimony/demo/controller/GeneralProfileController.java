@@ -2,18 +2,13 @@ package com.matrimony.demo.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
-
 import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,31 +17,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.matrimony.demo.exception.AppException;
-import com.matrimony.demo.exception.BadRequestException;
-import com.matrimony.demo.exception.ResourceNotFoundException;
-import com.matrimony.demo.model.AstroProfile;
-import com.matrimony.demo.model.AuthProvider;
-import com.matrimony.demo.model.CareerProfile;
-import com.matrimony.demo.model.FamilyProfile;
-import com.matrimony.demo.model.PartnerPreference;
 import com.matrimony.demo.model.Profile;
-import com.matrimony.demo.model.Role;
-import com.matrimony.demo.model.RoleName;
-import com.matrimony.demo.model.User;
 import com.matrimony.demo.payload.ApiResponse;
-import com.matrimony.demo.payload.MaritalStatusPayload;
-import com.matrimony.demo.payload.SignUpRequest;
-import com.matrimony.demo.payload.UserIdentityAvailability;
-import com.matrimony.demo.payload.UserProfile;
-import com.matrimony.demo.repository.RoleRepository;
+import com.matrimony.demo.payload.Shortlist;
 import com.matrimony.demo.repository.UserRepository;
 import com.matrimony.demo.security.CurrentUser;
 import com.matrimony.demo.security.UserPrincipal;
+import com.matrimony.demo.service.EmailService;
 import com.matrimony.demo.service.ProfileService;
 
 @RestController
@@ -58,6 +39,12 @@ public class GeneralProfileController {
 
 	@Autowired
 	private ProfileService profileService;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@GetMapping("/user/profile/getProfiles")
 	public Page<Profile> getProfiles(Pageable pageable) {
@@ -123,4 +110,16 @@ public class GeneralProfileController {
 		return profileService.fetchDistinctDrink();
 	}
 	
+	@PostMapping("/user/profile/sendInterest")
+	public Boolean shortlist(@CurrentUser UserPrincipal userPrincipal,@RequestBody Shortlist shortlist) {
+		try {
+			//sendEmailInterest(userPrincipal.getEmail(),userRepository.getOne(shortlist.getId()).getEmail());
+			emailService.sendMail("prem30488@gmail.com","Test subject","Test mail");
+			return true;
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}		
+	}
 }
