@@ -83,5 +83,16 @@ public class ShortlistService {
 		}
 		return isShortlisted;
 	}
+	
+	public Boolean isShortlistedMe(UserPrincipal userPrincipal, Long id) {
+		Optional<User> u = userRepository.findById(userPrincipal.getId());
+		Boolean isShortlisted = false;
+		if(u.isPresent()) {
+			if (u.get().getShortlistedOf().contains(userRepository.findById(id).get()) || u.get().getId() == id) {
+				isShortlisted= true;
+			}
+		}
+		return isShortlisted;
+	}
 
 }

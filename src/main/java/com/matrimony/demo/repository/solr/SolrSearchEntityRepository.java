@@ -66,4 +66,7 @@ public interface SolrSearchEntityRepository extends SolrCrudRepository<SolrSearc
 
 	Page<SolrSearchEntity> findByDrinkIn(Collection<String> drinkers, Pageable pageable);
 
+	@Query("select * from SolrSearchEntity")
+	List<SolrSearchEntity> findAllDocs();
+
 }

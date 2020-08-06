@@ -6,12 +6,15 @@ import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.FacetPage;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.matrimony.demo.model.User;
 import com.matrimony.demo.payload.MaritalStatusPayload;
 import com.matrimony.demo.repository.solr.SolrSearchEntityRepository;
 import com.matrimony.demo.security.CurrentUser;
@@ -102,7 +106,91 @@ public class SolrSearchEntityController {
 		return tempList;
 
 	}
+	
+	@RequestMapping("/solrSearchEntity/getAllViewedMe")
+	public Page<SolrSearchEntity> getAllViewedDocs(@CurrentUser UserPrincipal userPrincipal, Pageable pageable) {
+		List<SolrSearchEntity> tempList = this.solrSearchEntityRepository.findAllDocs();
+		List<SolrSearchEntity> tempList2 = new ArrayList<SolrSearchEntity>();
+		for(int i=0 ; i<tempList.size();i++) {
+			if(this.viewService.isViewedMe(userPrincipal, tempList.get(i).getId())) {
+				tempList2.add(tempList.get(i));
+			}
+		}
+				
+		tempList2.stream()
+				.forEach((item) -> item.setIsViewed(this.viewService.isViewed(userPrincipal, item.getId())));
+				
+		tempList2.stream()
+				.forEach((item2) -> item2.setIsShortlisted(this.shortlistService.isShortlisted(userPrincipal, item2.getId())));
+		
+		tempList2.stream()
+				.forEach((item) -> item.setIsViewedMe(this.viewService.isViewedMe(userPrincipal, item.getId())));
 
+		int start = (int)pageable.getOffset();
+		int end = (start + pageable.getPageSize()) > tempList2.size() ? tempList2.size() : (start + pageable.getPageSize());
+		List<SolrSearchEntity> list = tempList2.subList(start, end);
+		Page<SolrSearchEntity> page = new PageImpl<SolrSearchEntity>(list,pageable,tempList2.size());
+		
+		return page;
+
+	}
+
+	@RequestMapping("/solrSearchEntity/getAllViewedMeNotShortlisted")
+	public Page<SolrSearchEntity> getAllViewedMeNotShortlisted(@CurrentUser UserPrincipal userPrincipal, Pageable pageable) {
+		List<SolrSearchEntity> tempList = this.solrSearchEntityRepository.findAllDocs();
+		List<SolrSearchEntity> tempList2 = new ArrayList<SolrSearchEntity>();
+		for(int i=0 ; i<tempList.size();i++) {
+			if(this.viewService.isViewedMe(userPrincipal, tempList.get(i).getId()) && !this.shortlistService.isShortlistedMe(userPrincipal, tempList.get(i).getId())) {
+				tempList2.add(tempList.get(i));
+			}
+		}
+				
+		tempList2.stream()
+				.forEach((item) -> item.setIsViewed(this.viewService.isViewed(userPrincipal, item.getId())));
+				
+		tempList2.stream()
+				.forEach((item2) -> item2.setIsShortlisted(this.shortlistService.isShortlisted(userPrincipal, item2.getId())));
+		
+		tempList2.stream()
+				.forEach((item) -> item.setIsViewedMe(this.viewService.isViewedMe(userPrincipal, item.getId())));
+
+		int start = (int)pageable.getOffset();
+		int end = (start + pageable.getPageSize()) > tempList2.size() ? tempList2.size() : (start + pageable.getPageSize());
+		List<SolrSearchEntity> list = tempList2.subList(start, end);
+		Page<SolrSearchEntity> page = new PageImpl<SolrSearchEntity>(list,pageable,tempList2.size());
+		
+		return page;
+
+	}
+
+	@RequestMapping("/solrSearchEntity/getAllShortlisted")
+	public Page<SolrSearchEntity> getAllShortlisted(@CurrentUser UserPrincipal userPrincipal, Pageable pageable) {
+		List<SolrSearchEntity> tempList = this.solrSearchEntityRepository.findAllDocs();
+		List<SolrSearchEntity> tempList2 = new ArrayList<SolrSearchEntity>();
+		for(int i=0 ; i<tempList.size();i++) {
+			if(this.shortlistService.isShortlisted(userPrincipal, tempList.get(i).getId())) {
+				tempList2.add(tempList.get(i));
+			}
+		}
+				
+		tempList2.stream()
+				.forEach((item) -> item.setIsViewed(this.viewService.isViewed(userPrincipal, item.getId())));
+				
+		tempList2.stream()
+				.forEach((item2) -> item2.setIsShortlisted(this.shortlistService.isShortlisted(userPrincipal, item2.getId())));
+		
+		tempList2.stream()
+				.forEach((item) -> item.setIsViewedMe(this.viewService.isViewedMe(userPrincipal, item.getId())));
+
+		int start = (int)pageable.getOffset();
+		int end = (start + pageable.getPageSize()) > tempList2.size() ? tempList2.size() : (start + pageable.getPageSize());
+		List<SolrSearchEntity> list = tempList2.subList(start, end);
+		Page<SolrSearchEntity> page = new PageImpl<SolrSearchEntity>(list,pageable,tempList2.size());
+		
+		return page;
+
+	}
+	
 	@GetMapping("/solrSearchEntity/getWeeklyEntities")
 	public List<SolrSearchEntity> getWeeklysolrSearchEntity() {
 		ZoneId defaultZoneId = ZoneId.systemDefault();

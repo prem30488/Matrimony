@@ -138,6 +138,8 @@ public class SolrSearchEntity {
 	
 	private Boolean isViewed;
 	
+	private Boolean isViewedMe;
+	
 	private String name;
 	
 	public Long getId() {
@@ -490,6 +492,14 @@ public class SolrSearchEntity {
 
 	public void setIsViewed(Boolean isViewed) {
 		this.isViewed = isViewed;
+	}
+
+	public Boolean getIsViewedMe() {
+		return isViewedMe;
+	}
+
+	public void setIsViewedMe(Boolean isViewedMe) {
+		this.isViewedMe = isViewedMe;
 	}
 	
 	

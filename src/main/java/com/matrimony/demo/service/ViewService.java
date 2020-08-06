@@ -83,5 +83,17 @@ public class ViewService {
 		}
 		return isViewed;
 	}
+	
+	public Boolean isViewedMe(UserPrincipal userPrincipal, Long id) {
+		Optional<User> u = this.userRepository.findById(userPrincipal.getId());
+		Boolean isViewed = false;
+		if(u.isPresent()) {
+			if (u.get().getViewedOf().contains(userRepository.findById(id).get())) {
+				isViewed= true;
+				//System.out.println(u.get().getViewedOf().get(0).getName());	
+			}
+		}
+		return isViewed;
+	}
 
 }
