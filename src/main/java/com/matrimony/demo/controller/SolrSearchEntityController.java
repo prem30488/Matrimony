@@ -368,7 +368,7 @@ public class SolrSearchEntityController {
 		
 	  result.stream()
 		.forEach((item2) -> item2.setIsShortlisted(shortlistService.isShortlisted(userPrincipal, item2.getId())));
-
+	  //develop branch
 	  return result;
 	}
 	
