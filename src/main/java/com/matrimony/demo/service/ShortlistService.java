@@ -77,7 +77,7 @@ public class ShortlistService {
 		Optional<User> u = userRepository.findById(userPrincipal.getId());
 		Boolean isShortlisted = false;
 		if(u.isPresent()) {
-			if (u.get().getShortlisted().contains(userRepository.findById(id).get()) || u.get().getId() == id) {
+			if (u.get().getShortlisted().contains(userRepository.findById(id).get())) {
 				isShortlisted= true;
 			}
 		}
@@ -88,7 +88,7 @@ public class ShortlistService {
 		Optional<User> u = userRepository.findById(userPrincipal.getId());
 		Boolean isShortlisted = false;
 		if(u.isPresent()) {
-			if (u.get().getShortlistedOf().contains(userRepository.findById(id).get()) || u.get().getId() == id) {
+			if (u.get().getShortlistedOf().contains(userRepository.findById(id).get())) { //|| u.get().getId() == id) {
 				isShortlisted= true;
 			}
 		}

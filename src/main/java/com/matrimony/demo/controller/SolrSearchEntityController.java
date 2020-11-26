@@ -177,7 +177,7 @@ public class SolrSearchEntityController {
 				.forEach((item) -> item.setIsViewed(this.viewService.isViewed(userPrincipal, item.getId())));
 				
 		tempList2.stream()
-				.forEach((item2) -> item2.setIsShortlisted(this.shortlistService.isShortlisted(userPrincipal, item2.getId())));
+				.forEach((item) -> item.setIsShortlisted(this.shortlistService.isShortlisted(userPrincipal, item.getId())));
 		
 		tempList2.stream()
 				.forEach((item) -> item.setIsViewedMe(this.viewService.isViewedMe(userPrincipal, item.getId())));
